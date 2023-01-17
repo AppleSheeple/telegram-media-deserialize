@@ -219,7 +219,14 @@ impl SerializedFile {
         let mut in_offset = 0;
         // TODO: loop limit in-case a bad file is encountered
         'out: while in_offset < self.metadata.len() {
-            let parts = self._read_u32_le()?;
+            let parts_res = self._read_u32_le();
+
+            if parts_res.is_err() {
+                eprintln!("reached EOF, will stop parsing..");
+                break 'out;
+            }
+
+            let parts = parts_res?;
 
             if parts == 0 || parts > MAX_PARTS_COUNT {
                 eprintln!("Slice{slice_i}: in_offset={in_offset}, \
