@@ -197,11 +197,16 @@ impl SerializedFile {
                 let last_part = &info[len-1];
                 let last_contiguous = &info[last_contigous_i];
                 let last_contiguous_offset = last_contiguous.out_offset + last_contiguous.part_size;
+                let last_contiguous_offset_kib = (last_contiguous_offset as f64) / 1024.0;
+                let last_contiguous_offset_mib = last_contiguous_offset_kib / 1024.0;
                 let discontinuity_len = last_part.out_offset - last_contiguous_offset;
                 eprintln!("\n=======\nAfter ordering part info by out_offset:\n \
                             First part: {first_part:?}\n \
                             Last contiguous: {last_contiguous:?}\n \
-                            Last contiguous offset: {last_contiguous_offset} (Discontinuity: {discontinuity_len} bytes)\n \
+                            Last contiguous offset: {last_contiguous_offset} bytes \
+                            ({last_contiguous_offset_kib:.4}KiB/\
+                            {last_contiguous_offset_mib:.4}MiB) \
+                            (Discontinuity: {discontinuity_len} bytes)\n \
                             Last part: {last_part:?}\n=======");
             },
         }
