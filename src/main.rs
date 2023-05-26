@@ -183,11 +183,13 @@ impl SerializedFile {
             0 | 1 => (),
             len => { 
                 let mut last_contigous_i = 0;
-                for i in 1..len {
+                'contig: for i in 1..len {
                     let prev = &info[i-1];
                     let curr = &info[i];
                     if curr.out_offset == prev.out_offset + prev.part_size {
                         last_contigous_i = i;
+                    } else {
+                        break 'contig;
                     }
                 }
                 // report
